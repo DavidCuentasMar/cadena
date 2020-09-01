@@ -7,6 +7,7 @@ package blockchain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -16,7 +17,11 @@ public class Blockchain {
 
     public static final int DIFFICULTY = 3;
     
+    ArrayList<JavaContract> contracts;
     
+    public static HashMap<String, Object> javaContractsMap = new HashMap<String, Object>(){{
+        put("JavaCoin", new JavaCoinContract());
+    }};
     
     
     
@@ -28,13 +33,21 @@ public class Blockchain {
         // TODO code application logic here
         
         Chain theChain = new Chain();
+        TransactionPool txPool = new TransactionPool();
         
-        String data = "data1";
-        Bloque b = new Bloque(0, LocalDateTime.now(), data, "0");
+        txPool.addTransaction(new Transaction(
+                "addrx1",
+                "contractAddress",
+                new String[]{"Destiny", "10.0"})
+        );
+        txPool.addTransaction(new Transaction("addrx2","contractAddress",new String[]{"Destiny", "20.0"}));
+        txPool.addTransaction(new Transaction("addrx3","contractAddress",new String[]{"Destiny", "30.0"}));
+        
+        Bloque b = new Bloque(0, LocalDateTime.now(), txPool.getTransactions(), "0");
+        //Before adding the block to the cain we should check all transactios to see if they are okey
+        Miner.checkTransactions(txPool.getTransactions());
         theChain.addBlock(b);
         
-        data = "data2";
-        theChain.addBlock(data);
         
         theChain.listAllBlocks();
         

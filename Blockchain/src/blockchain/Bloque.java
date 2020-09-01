@@ -7,6 +7,7 @@ package blockchain;
 
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -18,21 +19,21 @@ public class Bloque {
     int idCadena;
     int index;
     LocalDateTime timestamp;
-    Object data;
+    ArrayList<Transaction> transactions;
     String previousHash;
     String hash;
     int nonce;
     Random r;
 
-    public Bloque(int index, LocalDateTime timestamp, Object data, String previousHash) {
-        this(index, timestamp, data, previousHash, Blockchain.DIFFICULTY);
+    public Bloque(int index, LocalDateTime timestamp, ArrayList transactions, String previousHash) {
+        this(index, timestamp, transactions, previousHash, Blockchain.DIFFICULTY);
     }
     
-    public Bloque(int index, LocalDateTime timestamp, Object data, String previousHash, int difficulty) {
+    public Bloque(int index, LocalDateTime timestamp, ArrayList transactions, String previousHash, int difficulty) {
         r = new Random();
         this.index = index;
         this.timestamp = timestamp;
-        this.data = data;
+        this.transactions = transactions;
         this.previousHash = previousHash;
         this.nonce = r.nextInt();
         this.hash = this.calculateHash(this.toString4Hash());
@@ -80,7 +81,7 @@ public class Bloque {
         StringBuffer s = new StringBuffer();
         s.append(index);
         s.append(timestamp);
-        s.append(data);
+        s.append(transactions);
         s.append(previousHash);
         s.append(nonce);
         return s.toString();
@@ -122,13 +123,7 @@ public class Bloque {
         this.timestamp = timestamp;
     }
 
-    public Object getData() {
-        return data;
-    }
 
-    public void setData(Object data) {
-        this.data = data;
-    }
 
     public String getPreviousHash() {
         return previousHash;
@@ -159,7 +154,7 @@ public class Bloque {
         
         s.append(index); s.append("\t");
         s.append(timestamp); s.append("\t");
-        s.append(data); s.append("\t");
+        s.append(transactions); s.append("\t");
         s.append(this.previousHash); s.append("\t");
         s.append(nonce); s.append("\t");
         s.append(hash);

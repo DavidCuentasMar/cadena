@@ -36,8 +36,9 @@ public class Chain {
     }
     
     public void addGenesisBlock(){
-        String data = "Genesis block "+id;
-        Bloque b = new Bloque(0, LocalDateTime.now(), data, "0");
+        Transaction tx0 = new Transaction("addrx1","contractAddress",new String[]{"Destiny", "10.0"});
+        ArrayList<Transaction> txs = new ArrayList();
+        Bloque b = new Bloque(0, LocalDateTime.now(), txs, "0");
         b.validate(difficulty);
         chain.add(b);
     }
@@ -70,9 +71,9 @@ public class Chain {
         return false;
     }
     
-    public boolean addBlock(String data){
+    public boolean addBlock(ArrayList transactions){
         
-        Bloque b = new Bloque(chain.size(), LocalDateTime.now(), data, this.getLastBlockHash());
+        Bloque b = new Bloque(chain.size(), LocalDateTime.now(), transactions, this.getLastBlockHash());
         b.validate(difficulty);
         
        return this.addBlock(b);
