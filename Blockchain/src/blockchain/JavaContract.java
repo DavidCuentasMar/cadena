@@ -12,5 +12,6 @@ import java.util.ArrayList;
  * @author laptop
  */
 public abstract class JavaContract {
-        public abstract boolean ejecutar(Transaction transaction);
+    //Quien lo triggerio
+    public abstract boolean ejecutar(Transaction transaction);
 }

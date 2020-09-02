@@ -17,10 +17,8 @@ public class Blockchain {
 
     public static final int DIFFICULTY = 3;
     
-    ArrayList<JavaContract> contracts;
-    
     public static HashMap<String, Object> javaContractsMap = new HashMap<String, Object>(){{
-        put("JavaCoin", new JavaCoinContract());
+        put("JavaCoinContract", new JavaCoinContract() );
     }};
     
     
@@ -30,24 +28,28 @@ public class Blockchain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        
+        // Chain creation
         Chain theChain = new Chain();
-        TransactionPool txPool = new TransactionPool();
+
+        //Minner creation
+        Miner miner1 = new Miner(new TransactionPool());
         
-        txPool.addTransaction(new Transaction(
-                "addrx1",
-                "contractAddress",
-                new String[]{"Destiny", "10.0"})
-        );
-        txPool.addTransaction(new Transaction("addrx2","contractAddress",new String[]{"Destiny", "20.0"}));
-        txPool.addTransaction(new Transaction("addrx3","contractAddress",new String[]{"Destiny", "30.0"}));
+        //Adding Transaction to the miner's transacion pool
+        miner1.txPool.addTransaction(new Transaction("addrx1","JavaCoinContract",new String[]{"Destiny", "10.0"}));
+        miner1.txPool.addTransaction(new Transaction("addrx2","JavaCoinContract",new String[]{"Destiny", "20.0"}));
+        miner1.txPool.addTransaction(new Transaction("addrx3","JavaCoinContract",new String[]{"Destiny", "30.0"}));
         
-        Bloque b = new Bloque(0, LocalDateTime.now(), txPool.getTransactions(), "0");
-        //Before adding the block to the cain we should check all transactios to see if they are okey
-        Miner.checkTransactions(txPool.getTransactions());
+        //Create Genesis Block 
+        Bloque b = new Bloque(0, LocalDateTime.now(), new ArrayList(), "0");
         theChain.addBlock(b);
+
+          
+        //Miner Generates Candidate Block
+        Bloque minerBlock = miner1.GenerateCandiateBock();
+        miner1.broadCastBlock(minerBlock);
         
+        theChain.addBlock(minerBlock);
+
         
         theChain.listAllBlocks();
         

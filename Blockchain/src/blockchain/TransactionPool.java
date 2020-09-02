@@ -13,11 +13,13 @@ import java.util.ArrayList;
  */
 public class TransactionPool {
     ArrayList<Transaction> transactions;
+    
     public TransactionPool() {
         transactions = new ArrayList();
     }
     public void addTransaction(Transaction t){
         this.transactions.add(t);
+        
     }
     
     public ArrayList<Transaction> getTransactions(){
