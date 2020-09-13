@@ -1,4 +1,4 @@
-# cadena
+# BlcockChain Simulator
 Academic Modular Blockchain Initiative
 
 # Instructions
