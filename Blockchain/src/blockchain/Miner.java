@@ -35,7 +35,7 @@ public class Miner {
             System.out.println("From: " + tx.from_address);
             System.out.println("Data:" + tx.data);
             System.out.println("----");
-            ((JavaCatContract) Blockchain.javaContractsMap.get(tx.to_address)).ejecutar(tx);
+            //((JavaCatContract) Blockchain.javaContractsMap.get(tx.to_address)).ejecutar(tx);
         }
     }
 

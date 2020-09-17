@@ -13,11 +13,16 @@ public class Transaction {
     String from_address;
     String to_address;
     String[] data;
+    String hash;
+    
+    String dig_sign;
 
     Transaction(String from_address, String to_address, String[] data) {
         this.from_address = from_address;
         this.to_address = to_address;
         this.data = data;
+        //generar hash
+        //firma
     }
 
 
