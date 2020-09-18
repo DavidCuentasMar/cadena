@@ -9,6 +9,7 @@ import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
+import utils.HashUtils;
 
 /**
  *
@@ -36,7 +37,7 @@ public class Bloque {
         this.transactions = transactions;
         this.previousHash = previousHash;
         this.nonce = r.nextInt();
-        this.hash = this.calculateHash(this.toString4Hash());
+        this.hash = HashUtils.calculateHash(this.toString4Hash());
         validate(difficulty);
     }
 
@@ -45,7 +46,7 @@ public class Bloque {
     }
     
     public void rehash(){
-        this.hash = calculateHash(toString4Hash());
+        this.hash = HashUtils.calculateHash(toString4Hash());
     }
     
     public String getDifficultyString(int difficulty){
@@ -71,7 +72,7 @@ public class Bloque {
     
     public boolean verifyHash(int difficulty){
         
-        if(this.hash.equals(this.calculateHash(this.toString4Hash())))
+        if(this.hash.equals(HashUtils.calculateHash(this.toString4Hash())))
             return true;
         
         return false;
@@ -87,26 +88,6 @@ public class Bloque {
         return s.toString();
     }
     
-    //Taken from:
-    //https://stackoverflow.com/questions/5531455/how-to-hash-some-string-with-sha256-in-java
-    public String calculateHash(String base) {
-        
-        try{
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(base.getBytes("UTF-8"));
-            StringBuffer hexString = new StringBuffer();
-            for (int i = 0; i < hash.length; i++) {
-                String hex = Integer.toHexString(0xff & hash[i]);
-                if(hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch(Exception ex){
-           throw new RuntimeException(ex);
-        }
-        
-    }
-
     public int getIndex() {
         return index;
     }

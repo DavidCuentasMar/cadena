@@ -2,6 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/laptop/githubprojects/cadena/Blockchain/test/blockchain/DigitalSignatureTest.java</file>
+            <file>file:/C:/Users/laptop/githubprojects/cadena/Blockchain/src/blockchain/Chain.java</file>
+            <file>file:/C:/Users/laptop/githubprojects/cadena/Blockchain/src/blockchain/Bloque.java</file>
+            <file>file:/C:/Users/laptop/githubprojects/cadena/Blockchain/src/blockchain/Blockchain.java</file>
+            <file>file:/C:/Users/laptop/githubprojects/cadena/Blockchain/src/blockchain/Miner.java</file>
+            <file>file:/C:/Users/laptop/githubprojects/cadena/Blockchain/src/blockchain/Transaction.java</file>
+            <file>file:/C:/Users/laptop/githubprojects/cadena/Blockchain/src/blockchain/DigitalSignature.java</file>
+            <file>file:/C:/Users/laptop/githubprojects/cadena/Blockchain/src/blockchain/TransactionPool.java</file>
+        </group>
     </open-files>
 </project-private>

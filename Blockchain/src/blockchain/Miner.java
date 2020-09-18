@@ -39,7 +39,10 @@ public class Miner {
             //((JavaCatContract) Blockchain.javaContractsMap.get(tx.to_address)).ejecutar(tx);
         }
     }
-
+    public void reciveTransaction(Transaction tx){
+        this.txPool.addTransaction(tx);
+    }
+    
     void broadCastBlock(Bloque minerBlock) {
         System.out.println("Broadcast Block....");
     }

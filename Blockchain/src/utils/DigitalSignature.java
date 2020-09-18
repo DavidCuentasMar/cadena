@@ -1,5 +1,6 @@
-package blockchain;
+package utils;
 
+import blockchain.Transaction;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import javax.xml.bind.DatatypeConverter;
@@ -9,15 +10,40 @@ import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.JSONObject;
 
-
 public class DigitalSignature {
-    
+
     private static final String SPEC = "secp256k1";
     private static final String ALGO = "SHA256withECDSA";
 
-    JSONObject sender() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, UnsupportedEncodingException, SignatureException {
+    public static void sign(Transaction tx, String privateKeyString){
+        try {
+            EncodedKeySpec privateKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(privateKeyString));
+            KeyFactory keyFactory = KeyFactory.getInstance("EC");
+            PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
+            Signature ecdsaSign = Signature.getInstance(ALGO);
+            ecdsaSign.initSign(privateKey);
+            ecdsaSign.update(tx.getHash().getBytes("UTF-8"));
+            byte[] signature = ecdsaSign.sign();
+            String sig = Base64.getEncoder().encodeToString(signature);
+            tx.setSignature(sig);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(DigitalSignature.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(DigitalSignature.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeyException ex) {
+            Logger.getLogger(DigitalSignature.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(DigitalSignature.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SignatureException ex) {
+            Logger.getLogger(DigitalSignature.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public JSONObject sender() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, UnsupportedEncodingException, SignatureException {
 
         ECGenParameterSpec ecSpec = new ECGenParameterSpec(SPEC);
         KeyPairGenerator g = KeyPairGenerator.getInstance("EC");
@@ -47,7 +73,7 @@ public class DigitalSignature {
         return obj;
     }
 
-    boolean receiver(JSONObject obj) throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, UnsupportedEncodingException, SignatureException {
+    public boolean receiver(JSONObject obj) throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, UnsupportedEncodingException, SignatureException {
 
         Signature ecdsaVerify = Signature.getInstance(obj.getString("algorithm"));
         KeyFactory kf = KeyFactory.getInstance("EC");
@@ -64,14 +90,21 @@ public class DigitalSignature {
         return result;
     }
 
+    public static KeyPair generateKeyPair() {
+        try {
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
+            keyGen.initialize(new ECGenParameterSpec("secp256k1"), new SecureRandom());
+            return keyGen.generateKeyPair();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
+    }
 
     public static void generateKeys() throws Exception {
         //https://stackoverflow.com/questions/11339788/tutorial-of-ecdsa-algorithm-to-sign-a-string
-        
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
-        
         keyGen.initialize(new ECGenParameterSpec("secp256k1"), new SecureRandom());
-
         KeyPair pair = keyGen.generateKeyPair();
         PrivateKey priv = pair.getPrivate();
         PublicKey pub = pair.getPublic();
@@ -79,7 +112,6 @@ public class DigitalSignature {
         //System.out.println(pub);
         //System.out.println("Private Key");
         //System.out.println(priv);
-        
         /*
          * Create a Signature object and initialize it with the private key
          */
@@ -96,7 +128,6 @@ public class DigitalSignature {
          * Now that all the data to be signed has been read in, generate a
          * signature for it
          */
-
         byte[] realSig = ecdsa.sign();
         System.out.println("Signature: " + new BigInteger(1, realSig).toString(16));
 
